@@ -10,6 +10,69 @@ router.get('/', function(req, res) {
 module.exports = router;
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
+var Team = mongoose.model('Team');
+var Match = mongoose.model('Match');
+
+
+// GET route to get matches
+router.get('/matches', function(req, res, next) {
+  Match.find().populate('first_team').populate('second_team').exec(function(err, matches){
+    if(err){ return next(err); }
+
+    res.json(matches);
+  });
+});
+
+// POST route to store matches and populate the db
+router.post('/matches', function(req, res, next) {
+  var match = new Match(req.body);
+
+  match.save(function(err, match){
+    if(err){ return next(err); }
+
+    res.json(match);
+  });
+});
+
+router.param('match', function(req, res, next, id) {
+  var query = Match.findById(id);
+
+  query.exec(function (err, match){
+    if (err) { return next(err); }
+    if (!match) { return next(new Error('can\'t find match')); }
+    req.match = match;
+    return next();
+  });
+});
+
+router.get('/matches/:match', function(req, res, next) {
+  req.post.populate('teams', function(err, match) {
+    if (err) { return next(err); }
+
+    res.json(match);
+  });
+});
+
+
+// GET route to get teams
+router.get('/teams', function(req, res, next) {
+  Team.find(function(err, teams){
+    if(err){ return next(err); }
+
+    res.json(teams);
+  });
+});
+
+// POST route to store matches and populate the db
+router.post('/teams', function(req, res, next) {
+  var team = new Team(req.body);
+
+  team.save(function(err, team){
+    if(err){ return next(err); }
+
+    res.json(team);
+  });
+});
 
 // GET route to get posts
 router.get('/posts', function(req, res, next) {

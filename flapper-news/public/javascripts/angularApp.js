@@ -38,6 +38,32 @@ app.factory('posts', ['$http', function($http){
 
 }]);
 
+
+// Matches factory 
+
+app.factory('matches', ['$http', function($http){
+  var o = {matches: []};
+  o.getAll = function() {
+    return $http.get('/matches').success(function(data){
+      angular.copy(data, o.matches);
+      });
+  };
+  o.create = function(match) {
+    return $http.post('/matches', match).success(function(data){
+      o.matches.push(data);
+    });
+  };
+  o.get = function(id) {
+  return $http.get('/matches/' + id).then(function(res){
+    return res.data;
+    });
+  };
+
+  return o;
+
+}]);
+
+
 // App configuration
 
 app.config([
@@ -53,6 +79,17 @@ function($stateProvider, $urlRouterProvider) {
       resolve: {
           postPromise: ['posts', function(posts){
             return posts.getAll();
+          }]
+      }
+  });
+    $stateProvider
+    .state('matches', {
+      url: '/matches',
+      templateUrl: '/matches.html',
+      controller: 'MatchesCtrl',
+      resolve: {
+          postPromise: ['matches', function(matches){
+            return matches.getAll();
           }]
       }
   });
@@ -72,6 +109,13 @@ function($stateProvider, $urlRouterProvider) {
 }]);
 
 // MainCtrl and PostCtrl
+
+app.controller('MatchesCtrl', [
+'$scope',
+'matches',
+function($scope, matches){
+  $scope.matches = matches.matches;
+}]);
 
 app.controller('MainCtrl', [
 '$scope',
