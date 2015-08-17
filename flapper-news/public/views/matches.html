@@ -1,0 +1,12 @@
+<h1>Today football matches</h1>
+</div>
+<div ng-repeat="match in matches">
+        <span style="font-size:20px; margin-left:10px;">
+          <span>
+            {{match.first_team.name}} VS {{match.second_team.name}}
+          </span>
+          <span>
+            <a href="#/matches/{{match._id}}">Posts</a>
+          </span>
+        </span>
+</div>

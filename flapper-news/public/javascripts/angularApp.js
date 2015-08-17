@@ -48,6 +48,7 @@ app.factory('matches', ['$http', function($http){
       angular.copy(data, o.matches);
       });
   };
+
   o.create = function(match) {
     return $http.post('/matches', match).success(function(data){
       o.matches.push(data);
@@ -57,6 +58,9 @@ app.factory('matches', ['$http', function($http){
   return $http.get('/matches/' + id).then(function(res){
     return res.data;
     });
+  };
+  o.addPost = function(id, post) {
+    return $http.post('/matches/' + id + '/posts', post)
   };
 
   return o;
@@ -74,7 +78,7 @@ function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('home', {
     	url: '/home',
-      templateUrl: '/home.html',
+      templateUrl: 'views/home.html',
       controller: 'MainCtrl',
       resolve: {
           postPromise: ['posts', function(posts){
@@ -85,7 +89,7 @@ function($stateProvider, $urlRouterProvider) {
     $stateProvider
     .state('matches', {
       url: '/matches',
-      templateUrl: '/matches.html',
+      templateUrl: 'views/matches.html',
       controller: 'MatchesCtrl',
       resolve: {
           postPromise: ['matches', function(matches){
@@ -94,9 +98,20 @@ function($stateProvider, $urlRouterProvider) {
       }
   });
   $stateProvider
+    .state('single_matches', {
+      url: '/matches/{id}',
+      templateUrl: 'views/single_match.html',
+      controller: 'Single_MatchCtrl',
+      resolve: {
+        match: ['$stateParams', 'matches', function($stateParams, matches) {
+          return matches.get($stateParams.id);
+        }]
+      }
+  });
+  $stateProvider
    	.state('posts', {
   		url: '/posts/{id}',
-  		templateUrl: '/posts.html',
+  		templateUrl: 'views/posts.html',
   		controller: 'PostsCtrl',
       resolve: {
         post: ['$stateParams', 'posts', function($stateParams, posts) {
@@ -117,6 +132,7 @@ function($scope, matches){
   $scope.matches = matches.matches;
 }]);
 
+//HOME CONTROLLER
 app.controller('MainCtrl', [
 '$scope',
 'posts',
@@ -136,6 +152,27 @@ function($scope, posts){
 	$scope.incrementUpvotes = function(post) {
     posts.upvote(post);
   };
+}]);
+
+app.controller('Single_MatchCtrl', [
+'$scope',
+'match',
+'matches',
+function($scope, match, matches){
+  $scope.match = match;
+
+  $scope.addPost = function(){
+    if(!$scope.title || $scope.title === '') { return; }
+    matches.addPost(match._id,{
+      title: $scope.title,
+      link: $scope.link,
+    }).success(function(post) {
+      $scope.match.posts.push(post);
+    });
+    $scope.title = '';
+    $scope.link = '';
+  };
+
 }]);
 
 app.controller('PostsCtrl', [

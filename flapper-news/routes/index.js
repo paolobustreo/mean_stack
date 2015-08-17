@@ -8,10 +8,10 @@ router.get('/', function(req, res) {
 });
 
 module.exports = router;
-var Post = mongoose.model('Post');
-var Comment = mongoose.model('Comment');
 var Team = mongoose.model('Team');
 var Match = mongoose.model('Match');
+var Post = mongoose.model('Post');
+var Comment = mongoose.model('Comment');
 
 
 // GET route to get matches
@@ -35,8 +35,7 @@ router.post('/matches', function(req, res, next) {
 });
 
 router.param('match', function(req, res, next, id) {
-  var query = Match.findById(id);
-
+  var query = Match.findById(id).populate('first_team').populate('second_team').populate('posts');
   query.exec(function (err, match){
     if (err) { return next(err); }
     if (!match) { return next(new Error('can\'t find match')); }
@@ -46,11 +45,25 @@ router.param('match', function(req, res, next, id) {
 });
 
 router.get('/matches/:match', function(req, res, next) {
-  req.post.populate('teams', function(err, match) {
-    if (err) { return next(err); }
+  res.json(req.match);
+  next();
+});
 
-    res.json(match);
+router.post('/matches/:match/posts', function(req, res, next) {
+  var post = new Post(req.body);
+  post.match = req.match;
+
+  post.save(function(err, match){
+    if(err){ return next(err); }
+
+    req.match.posts.push(post);
+    req.match.save(function(err, match) {
+      if(err){ return next(err); }
+
+      res.json(match);
+    });
   });
+  res.end();
 });
 
 
@@ -58,7 +71,6 @@ router.get('/matches/:match', function(req, res, next) {
 router.get('/teams', function(req, res, next) {
   Team.find(function(err, teams){
     if(err){ return next(err); }
-
     res.json(teams);
   });
 });
