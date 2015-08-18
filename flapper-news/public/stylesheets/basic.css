@@ -1,0 +1,52 @@
+body {
+	background-color: #303030;
+}
+
+#logo {
+	width: 300px;
+	padding: 40px;
+}
+
+.glyphicon {
+	color: #FF3300;
+	font-size: 30px;
+}
+
+#upvotes {
+	display: inline;
+	margin-left: 10px;
+	font-size: 30px;
+	color: #337ab7;
+}
+
+#title {
+	color: white;
+	display: inline;
+	font-size: 30px;
+	margin-left: 10px;
+}
+
+#artist {
+	color: #FF6600;
+	display: inline;
+	font-size: 30px;
+	margin-left: 10px;
+}
+
+#label {
+	color: #FFFF00;
+	display: inline;
+	font-size: 30px;
+	margin-left: 10px;
+}
+
+#comments {
+	display: inline;
+	font-size: 10px;
+	margin-left: 10px;
+}
+
+#subtrack {
+	background-color: #FF3300;
+	border-color: #FF3300;
+}

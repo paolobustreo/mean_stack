@@ -1,28 +1,27 @@
-<h1>Flapper News</h1>
+<img id="logo" class="center-block" src="/images/logoht.png" alt="Hot Tracks logo">
+<div ng-repeat="track in tracks | orderBy:'-upvotes'">
+  <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(track)"></span>
+  <div id="upvotes">{{track.upvotes}}</div>
+  <div id="title">{{track.title | limitTo: 25}}</div>
+  <div id="artist">{{track.artist | limitTo: 25 }}</div>
+  <div id="label">{{track.label | limitTo: 25 }}</div>
+  <span id="comments">
+    <a href="#/tracks/{{track._id}}"><b>Comments</b></a>
+  </span>
 </div>
-<div ng-repeat="post in posts | orderBy:'-upvotes'">
-        <span class="glyphicon glyphicon-thumbs-up"
-          ng-click="incrementUpvotes(post)"></span>
-        {{post.upvotes}}
-        <span style="font-size:20px; margin-left:10px;">
-          <a ng-show="post.link" href="{{post.link}}">
-            {{post.title}}
-          </a>
-          <span ng-hide="post.link">
-            {{post.title}}
-          </span>
-          <span>
-            <a href="#/posts/{{post._id}}">Comments</a>
-          </span>
-        </span>
-</div>
-<form ng-submit="addPost()" style="margin-top:30px;">
-  <h3>Add a new post</h3>
+<form ng-submit="addtrack()" style="margin-top:30px;">
+  <h3>Add a new track</h3>
   <div class="form-group">
     <input type="text" class="form-control" placeholder="Title" ng-model="title"></input>
   </div>
   <div class="form-group">
-    <input type="text" class="form-control" placeholder="Link" ng-model="link"></input>
+    <input type="text" class="form-control" placeholder="Soundcloud" ng-model="soundcloud"></input>
   </div>
-  <button type="submit" class="btn btn-primary" ng-disabled="!title||!link||ValidateURL(link)==false">Post</button>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Artist" ng-model="artist"></input>
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Label" ng-model="label"></input>
+  </div>
+  <button type="submit" id="subtrack" class="btn btn-primary" ng-disabled="!title||!soundcloud||ValidateURL(soundcloud)==false">Submit Track</button>
 </form>

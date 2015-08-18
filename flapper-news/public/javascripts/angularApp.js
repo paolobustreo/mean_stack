@@ -1,68 +1,39 @@
 var app = angular.module('flapperNews', ['ui.router'])
 
-// Posts factory 
+// tracks factory 
 
-app.factory('posts', ['$http', function($http){
-  var o = {posts: []};
+app.factory('tracks', ['$http', function($http){
+  var o = {tracks: []};
   o.getAll = function() {
-    return $http.get('/posts').success(function(data){
-      angular.copy(data, o.posts);
+    return $http.get('/tracks').success(function(data){
+      angular.copy(data, o.tracks);
       });
   };
-  o.create = function(post) {
-    return $http.post('/posts', post).success(function(data){
-      o.posts.push(data);
+  o.create = function(track) {
+    return $http.post('/tracks', track).success(function(data){
+      o.tracks.push(data);
     });
   };
-  o.upvote = function(post) {
-    return $http.put('/posts/' + post._id + '/upvote')
+  o.upvote = function(track) {
+    return $http.put('/tracks/' + track._id + '/upvote')
     .success(function(data){
-      post.upvotes += 1;
+      track.upvotes += 1;
     });
   };
   o.get = function(id) {
-  return $http.get('/posts/' + id).then(function(res){
+  return $http.get('/tracks/' + id).then(function(res){
     return res.data;
     });
   };
   o.addComment = function(id, comment) {
-    return $http.post('/posts/' + id + '/comments', comment);
+    return $http.post('/tracks/' + id + '/comments', comment);
   };
-  o.upvoteComment = function(post, comment) {
-  return $http.put('/posts/' + post._id + '/comments/'+ comment._id + '/upvote')
+  o.upvoteComment = function(track, comment) {
+  return $http.put('/tracks/' + track._id + '/comments/'+ comment._id + '/upvote')
     .success(function(data){
       comment.upvotes += 1;
     });
   };
-  return o;
-
-}]);
-
-
-// Matches factory 
-
-app.factory('matches', ['$http', function($http){
-  var o = {matches: []};
-  o.getAll = function() {
-    return $http.get('/matches').success(function(data){
-      angular.copy(data, o.matches);
-      });
-  };
-
-  o.create = function(match) {
-    return $http.post('/matches', match).success(function(data){
-      o.matches.push(data);
-    });
-  };
-  o.get = function(id) {
-  return $http.get('/matches/' + id).then(function(res){
-    return res.data;
-    });
-  };
-  o.addPost = function(id, post) {
-    return $http.post('/matches/' + id + '/posts', post)
-  };
-
   return o;
 
 }]);
@@ -81,41 +52,19 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: 'views/home.html',
       controller: 'MainCtrl',
       resolve: {
-          postPromise: ['posts', function(posts){
-            return posts.getAll();
-          }]
-      }
-  });
-    $stateProvider
-    .state('matches', {
-      url: '/matches',
-      templateUrl: 'views/matches.html',
-      controller: 'MatchesCtrl',
-      resolve: {
-          postPromise: ['matches', function(matches){
-            return matches.getAll();
+          trackPromise: ['tracks', function(tracks){
+            return tracks.getAll();
           }]
       }
   });
   $stateProvider
-    .state('single_matches', {
-      url: '/matches/{id}',
-      templateUrl: 'views/single_match.html',
-      controller: 'Single_MatchCtrl',
+   	.state('tracks', {
+  		url: '/tracks/{id}',
+  		templateUrl: 'views/tracks.html',
+  		controller: 'tracksCtrl',
       resolve: {
-        match: ['$stateParams', 'matches', function($stateParams, matches) {
-          return matches.get($stateParams.id);
-        }]
-      }
-  });
-  $stateProvider
-   	.state('posts', {
-  		url: '/posts/{id}',
-  		templateUrl: 'views/posts.html',
-  		controller: 'PostsCtrl',
-      resolve: {
-        post: ['$stateParams', 'posts', function($stateParams, posts) {
-          return posts.get($stateParams.id);
+        track: ['$stateParams', 'tracks', function($stateParams, tracks) {
+          return tracks.get($stateParams.id);
         }]
       }
   });
@@ -123,76 +72,51 @@ function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('home');
 }]);
 
-// MainCtrl and PostCtrl
+// Homepage controller
 
-app.controller('MatchesCtrl', [
-'$scope',
-'matches',
-function($scope, matches){
-  $scope.matches = matches.matches;
-}]);
-
-//HOME CONTROLLER
 app.controller('MainCtrl', [
 '$scope',
-'posts',
-function($scope, posts){
-	$scope.posts = posts.posts;
+'tracks',
+function($scope, tracks){
+	$scope.tracks = tracks.tracks;
   
-  $scope.addPost = function(){
+  $scope.addtrack = function(){
     if(!$scope.title || $scope.title === '') { return; }
-    posts.create({
+    tracks.create({
       title: $scope.title,
-      link: $scope.link,
+      soundcloud: $scope.soundcloud,
+      artist: $scope.artist,
+      label: $scope.label
     });
     $scope.title = '';
-    $scope.link = '';
+    $scope.soundcloud = '';
+    $scope.artist = '';
+    $scope.label = '';
   };
 	
-	$scope.incrementUpvotes = function(post) {
-    posts.upvote(post);
+	$scope.incrementUpvotes = function(track) {
+    tracks.upvote(track);
   };
 }]);
 
-app.controller('Single_MatchCtrl', [
-'$scope',
-'match',
-'matches',
-function($scope, match, matches){
-  $scope.match = match;
-
-  $scope.addPost = function(){
-    if(!$scope.title || $scope.title === '') { return; }
-    matches.addPost(match._id,{
-      title: $scope.title,
-      link: $scope.link,
-    }).success(function(post) {
-      $scope.match.posts.push(post);
-    });
-    $scope.title = '';
-    $scope.link = '';
-  };
-
-}]);
-
-app.controller('PostsCtrl', [
+app.controller('tracksCtrl', [
 '$scope',
 '$stateParams',
-'posts',
-'post',
-function($scope, $stateParams, posts, post){
-	$scope.post = post;
+'tracks',
+'track',
+function($scope, $stateParams, tracks, track){
+	$scope.track = track;
 	$scope.addComment = function(){
     if($scope.body === '') { return; }
-      posts.addComment(post._id, {
+      tracks.addComment(track._id, {
       body: $scope.body,
       author: 'user',
     }).success(function(comment) {
-      $scope.post.comments.push(comment);
+      $scope.track.comments.push(comment);
     });
     $scope.body = '';
   };
   $scope.incrementUpvotes = function(comment){
-    posts.upvoteComment(post, comment);
+    tracks.upvoteComment(track, comment);
   };
 }]);

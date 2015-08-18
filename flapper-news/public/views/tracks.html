@@ -1,15 +1,15 @@
 <div class="page-header">
     <h3>
-      <a ng-show="post.link" href="{{post.link}}">
-        {{post.title}}
+      <a ng-show="track.soundcloud" href="{{track.soundcloud}}">
+        {{track.title}}
       </a>
-      <span ng-hide="post.link">
-        {{post.title}}
+      <span ng-hide="track.soundcloud">
+        {{track.title}}
       </span>
     </h3>
   </div>
 
-  <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+  <div ng-repeat="comment in track.comments | orderBy:'-upvotes'">
     <span class="glyphicon glyphicon-thumbs-up"
       ng-click="incrementUpvotes(comment)"></span>
     {{comment.upvotes}} - by {{comment.author}}
@@ -27,5 +27,5 @@
       placeholder="Comment"
       ng-model="body"></input>
     </div>
-    <button type="submit" class="btn btn-primary">Post</button>
+    <button type="submit" class="btn btn-primary">track</button>
   </form>
