@@ -1,4 +1,10 @@
-var app = angular.module('flapperNews', ['ui.router'])
+var app = angular.module('flapperNews', ['ui.router','ngSanitize']);
+
+// Soundcloud html iframe generator 
+SC.initialize({
+  client_id: '16720d64caaca630cc641f9dca4910f7'
+});
+
 
 // tracks factory 
 
@@ -10,8 +16,13 @@ app.factory('tracks', ['$http', function($http){
       });
   };
   o.create = function(track) {
-    return $http.post('/tracks', track).success(function(data){
+    var track_url = track.soundcloud;
+    SC.oEmbed(track_url, { auto_play: true }, function(oEmbed) {
+      track.soundcloud = oEmbed.html;
+      return $http.post('/tracks', track).success(function(data){
       o.tracks.push(data);
+    });
+
     });
   };
   o.upvote = function(track) {
@@ -77,11 +88,15 @@ function($stateProvider, $urlRouterProvider) {
 app.controller('MainCtrl', [
 '$scope',
 'tracks',
-function($scope, tracks){
+'$sce',
+function($scope, tracks, $sce){
 	$scope.tracks = tracks.tracks;
-  
+  angular.forEach($scope.tracks,function(value,index){
+                value.soundcloud = $sce.trustAsHtml((value.soundcloud));
+            })
   $scope.addtrack = function(){
     if(!$scope.title || $scope.title === '') { return; }
+    var url = $scope.soundcloud;
     tracks.create({
       title: $scope.title,
       soundcloud: $scope.soundcloud,
