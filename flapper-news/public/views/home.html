@@ -1,5 +1,5 @@
-<img id="logo" class="center-block" src="/images/logo.png" alt="Hot Tracks logo">
-<div ng-repeat="track in tracks | orderBy:'-upvotes'">
+<img id="logo" class="col-xs-4 col-xs-offset-4" src="/images/logo.png" alt="Hot Tracks logo">
+<div class ="col-xs-10 col-xs-offset-1" ng-repeat="track in tracks | orderBy:'-upvotes'">
   <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(track)"></span>
   <div id="upvotes">{{track.upvotes}}</div>
   <div id="title">{{track.title | limitTo: 25}}</div>
@@ -8,11 +8,14 @@
   <span id="comments">
     <a href="#/tracks/{{track._id}}"><b>Comments</b></a>
   </span>
-  <span id="soundcloud" ng-bind-html="track.soundcloud">
-    <a href="#/tracks/{{track._id}}"><b>Play on Soundcloud</b></a>
-    </div>
+  <div id="playitnow" ng-click="track.playing=true" ng-show="!track.playing">Play it now
+  <span class="glyphicon glyphicon-play"></span>
+  </div>
+  <span id="soundcloud" ng-show="track.playing" ng-bind-html="track.soundcloud">
   </span>
+  </div>
 </div>
+<div class="col-xs-8 col-xs-offset-2">
 <form ng-submit="addtrack()" style="margin-top:30px;">
   <h3>Add a new track</h3>
   <div class="form-group">
@@ -27,5 +30,6 @@
   <div class="form-group">
     <input type="text" class="form-control" placeholder="Label" ng-model="label"></input>
   </div>
-  <button type="submit" id="subtrack" class="btn btn-primary" ng-disabled="!title||!soundcloud||ValidateURL(soundcloud)==false">Submit Track</button>
+  <button type="submit" id="subtrack" class="btn btn-primary col-xs-6 col-xs-offset-3">Submit Track</button>
 </form>
+</div>

@@ -17,7 +17,7 @@ app.factory('tracks', ['$http', function($http){
   };
   o.create = function(track) {
     var track_url = track.soundcloud;
-    SC.oEmbed(track_url, { auto_play: true }, function(oEmbed) {
+    SC.oEmbed(track_url, { auto_play: false, maxheight: 150 }, function(oEmbed) {
       track.soundcloud = oEmbed.html;
       return $http.post('/tracks', track).success(function(data){
       o.tracks.push(data);
@@ -91,15 +91,13 @@ app.controller('MainCtrl', [
 '$sce',
 function($scope, tracks, $sce){
 	$scope.tracks = tracks.tracks;
-  angular.forEach($scope.tracks,function(value,index){
-                value.soundcloud = $sce.trustAsHtml((value.soundcloud));
-            })
+  angular.forEach($scope.tracks,function(value,index){value.soundcloud = $sce.trustAsHtml((value.soundcloud));})
   $scope.addtrack = function(){
     if(!$scope.title || $scope.title === '') { return; }
-    var url = $scope.soundcloud;
     tracks.create({
       title: $scope.title,
       soundcloud: $scope.soundcloud,
+      playing: false,
       artist: $scope.artist,
       label: $scope.label
     });

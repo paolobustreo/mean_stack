@@ -5,6 +5,7 @@ var TrackSchema = new mongoose.Schema({
   artist: String,
   label: String,
   soundcloud: String,
+  playing: { type: Boolean, default: false },
   upvotes: {type: Number, default: 0},
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
 });

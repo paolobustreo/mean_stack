@@ -1,13 +1,8 @@
-<div class="page-header">
-    <h3>{{track.title}}</h3>
-</div>
   <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(track)"></span>
   <div id="upvotes">{{track.upvotes}}</div>
   <div id="title">{{track.title | limitTo: 25}}</div>
   <div id="artist">by {{track.artist | limitTo: 25 }}</div>
   <div id="label">from {{track.label | limitTo: 25 }}</div>
-  <span id="soundcloud" ng-bind-html="track.soundcloud"> </span>
-
   <div ng-repeat="comment in track.comments | orderBy:'-upvotes'">
     <span class="glyphicon glyphicon-thumbs-up"
       ng-click="incrementUpvotes(comment)"></span>
@@ -27,6 +22,4 @@
       ng-model="body"></input>
     </div>
     <button type="submit" class="btn btn-primary">track</button>
-
-  <span id="soundcloud" ng-show="!track.playing" ng-bind-html="track.soundcloud">
-  </span>
+  </form>

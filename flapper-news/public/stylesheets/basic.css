@@ -4,16 +4,20 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	min-width: 800px;
 }
 
 #logo {
-	width: 400px;
-	padding: 40px;
+	padding: 1%;
 }
 
-.glyphicon {
+.glyphicon-thumbs-up {
 	color: #FF6600;
 	font-size: 30px;
+}
+
+.glyphicon-play {
+	color: #FF6600;
 }
 
 #upvotes {
@@ -53,6 +57,18 @@ body {
 	color: #FF9900;
 }
 
+#playitnow {
+	color: #FF6600;
+	display: inline;
+	font-size: 10px;
+	margin-left: 10px;
+	cursor:hand;
+}
+
+iframe{
+	margin-bottom: 20px;
+}
+
 #subtrack {
 	background-color: #FF6600;
 	border-color: #FF6600;
@@ -60,4 +76,10 @@ body {
 
 h3 {
 	color: #FF6600;
+	font-family: 'Lato', sans-serif;
+}
+
+#subtrack {
+	background-color: #FF6600;
+	border-color: #FF6600;
 }
