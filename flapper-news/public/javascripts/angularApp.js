@@ -117,7 +117,9 @@ app.controller('tracksCtrl', [
 '$stateParams',
 'tracks',
 'track',
-function($scope, $stateParams, tracks, track){
+'$sce',
+function($scope, $stateParams, tracks, track, $sce){
+  track.soundcloud = $sce.trustAsHtml(track.soundcloud);
 	$scope.track = track;
 	$scope.addComment = function(){
     if($scope.body === '') { return; }
