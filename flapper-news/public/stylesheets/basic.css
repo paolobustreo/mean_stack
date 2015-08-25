@@ -1,51 +1,45 @@
-/*
 body {
-	background: url(/images/city.png) bottom no-repeat,  url(/images/trex.png) right bottom no-repeat, -webkit-gradient(linear,left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
+	background: url(/images/bottom.png) bottom no-repeat , -webkit-gradient(linear,left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
 	background-image: -moz-linear-gradient(left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
     background-image: -webkit-linear-gradient(left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
     background-image: -ms-linear-gradient(left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
-	background-size: 100%, 20%, auto;
-	min-width: 800px;
-}
-*/
-
-body {
-	background: url(/images/bottom.png), -webkit-gradient(linear,left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
-	background-image: -moz-linear-gradient(left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
-    background-image: -webkit-linear-gradient(left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
-    background-image: -ms-linear-gradient(left bottom,left top,color-stop(0.10,#FFFFCC),color-stop(0.70,#99CCCC));
-	background-size: 100%,auto;
+	background-size: 100%, auto;
 	min-width: 800px;
 }
 
 
 body:before {
-          content: "";
-          position: fixed;
-          top: -10px;
-          left: 0;
-          width: 100%;
-          height: 10px;
-
-          -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
-              -moz-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
-                         box-shadow: 0px 0px 10px rgba(0,0,0,.8);
-
-          z-index: 100;
+    content: "";
+    position: fixed;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
+	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,.8);
+	box-shadow: 0px 0px 10px rgba(0,0,0,.8);
+	z-index: 100;
 }
 
+.nav {
+	width: 100%;
+	margin: 0px;
+	height: 41px;
+	background-color: #9966FF;
+	border: 0px;
+}
 
 #logo {
-	padding: 3%;
+	margin-top: -5px;
+	width: 100%;
+}
+
+.page-header {
+	border-color: #9966FF;
 }
 
 .grow { transition: all .2s ease-in-out; }
 .grow:hover { transform: scale(1.1); }
-
-#logo:hover {
-	animation-name: bigger;
-	animation-duration: 4s;
-}
 
 
 .glyphicon-thumbs-up {
@@ -108,14 +102,19 @@ iframe{
 	margin-top: 20px;
 }
 
-#subtrack {
+.hotbtn {
 	background-color: #9966FF;
 	border-color: #9966FF;
 }
 
-h3 {
+h3, h1 {
 	color: #9966FF;
 	font-family: 'Lato', sans-serif;
+}
+
+h1 small {
+	color: white;
+	margin-left: 10px;
 }
 
 .panel {
@@ -139,4 +138,20 @@ h3 {
 #soundcloud {
 	height: 200px;
 	width: 100%;
+}
+
+.navbar-brand {
+	width: 200px;
+}
+
+
+.nav-pills a {
+	font-size: 15px;
+	color: white;
+	font-family: 'Lato', sans-serif;
+}
+
+.nav-tabs>li>a:hover, .nav>li>a:focus, .nav>li>a:hover {
+    border-color: white !important;
+    background-color: #9933FF !important;
 }

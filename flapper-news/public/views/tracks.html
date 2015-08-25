@@ -1,4 +1,6 @@
-<a href="#/home"><img id="logo" class="col-xs-4 col-xs-offset-4 grow" src="/images/logo3.png" alt="Hot Tracks logo" ng-href="home.html"></a>
+<div class="page-header">
+  <h1>Techno charts <small>Subtext for header</small></h1>
+</div>
 <div class ="col-xs-10 col-xs-offset-1">
 <span class="glyphicon glyphicon-thumbs-up grow" ng-click="incrementUpvotes(track)"></span>
 <div id="upvotes">{{track.upvotes}}</div>
@@ -8,7 +10,7 @@
  <span id="soundcloud"  ng-bind-html="track.soundcloud" style="margin-top:30px;"> </span>
 </div>
 <div class ="col-xs-8 col-xs-offset-2" >
-  <div ng-repeat="comment in track.comments | orderBy:'-upvotes'">
+  <div ng-repeat="comment in track.comments | orderBy:'-upvotes'" ng-show="isLoggedIn()">
     <div class="panel panel-default">
       <div class="panel-heading">
         {{ comment.author }}
@@ -20,8 +22,12 @@
     </div>
   </div>
 </div>
+
+<div ng-hide="isLoggedIn()">
+  <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h3>
+</div>
 <!-- Add new comment form -->
-<div class ="col-xs-6 col-xs-offset-3">
+<div class ="col-xs-6 col-xs-offset-3" ng-show="isLoggedIn()">
   <form ng-submit="addComment()"
     style="margin-top:30px;">
     <h3>Add a new comment</h3>
